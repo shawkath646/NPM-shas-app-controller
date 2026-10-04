@@ -1,147 +1,98 @@
-# SH Authentication System App Controller
-This npm module is the nextjs app controller, designed for managing applications and retrieving data registered on the official website. The module supports fetching application data from the official website, as well as remotely activating, deactivating, and displaying alert toast messages without the need for rebuilding or modifying the source code.
+<!-- HEADER SECTION -->
+<div align="center">
 
-## Installation
+# SHAS App Controller (`shas-app-controller`)
 
+**[DEPRECATED] Next.js npm package for remote project activation, deactivation, and alert toasts.**
+
+<!-- BADGES -->
+[![Status](https://img.shields.io/badge/Status-Deprecated-inactive?style=flat-square)](#)
+[![Author](https://img.shields.io/badge/Author-Shawkat%20Hossain%20Maruf-black?style=flat-square)](https://shawkath646.dev)
+[![Ecosystem](https://img.shields.io/badge/Ecosystem-clouburstlab-2563EB?style=flat-square)](https://clouburstlab.com)
+[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](#-license)
+[![NPM](https://img.shields.io/badge/NPM-shas--app--controller-CB3837?style=flat-square&logo=npm&logoColor=white)](#)
+
+</div>
+
+---
+
+### 📋 Project Overview
+
+| Property | Details |
+| :--- | :--- |
+| **Author** | [Shawkat Hossain Maruf](https://shawkath646.dev) |
+| **Platform** | Node.js / NPM Library (Next.js Application Controller) |
+| **Period / Timeline** | Mar 2024 |
+| **Status** | Deprecated / Unmaintained (Archived) |
+| **Origin** | Evolved from [`sh-web-switch`](https://github.com/shawkath646/sh-web-switch) |
+| **Primary Stack** | TypeScript, Next.js, NPM Package |
+
+---
+
+> [!WARNING]
+> **Deprecation Notice**  
+> This package is **deprecated, unmaintained, and archived**. It was built as the package-based successor to [`sh-web-switch`](https://github.com/shawkath646/sh-web-switch) to integrate with the legacy **SH Authentication System (SHAS)**. Both tools are now legacy and preserved solely for archival purposes.
+
+---
+
+## 🎯 Purpose & History
+
+### Why It Existed
+Developed to eliminate the need for hardcoded remote controls, this module connected Next.js applications directly to the central SH Authentication System dashboard. It allowed the site owner to remotely deactivate applications, fetch registered brand metadata, and display dynamic maintenance toast alerts without re-deploying code.
+
+### What It Solved
+- **No-Code Remote Kill-Switch:** Handled project status queries dynamically during Next.js server-side rendering.
+- **Broadcast Alert Toasts:** Delivered global maintenance and warning banners into consumer frontends with configurable recurrence intervals.
+- **Metadata Synchronization:** Automatically synchronized application name, logos, and support contacts registered in SHAS.
+
+---
+
+## 📦 Historical Usage (Legacy Reference)
+
+```bash
+npm install --save-dev shas-app-controller
 ```
 
-npm i --save-dev shas-app-controller
+### Configuration (`shas.config.ts`)
 
-```
-
-## Usage
-
-### 1. Register application to SH Authentication System [application page](https://sh-authentication-system.vercel.app/auth/profile/applications).
-Copy the **app id** and **app secret** that is provided into application details page.
-
- 
-### 2. Creating a Configuration File
-
-Create a **shas.config.ts** file in the root directory:
-```
-
+```typescript
 import SHAS from "shas-app-controller";
 
-// pass app id and secret provided from our website
-
 const { ContentWrapper, appData, brandData } = await SHAS({
-
   appId: process.env.SHAS_APP_ID as string,
   appSecret: process.env.SHAS_APP_SECRET as string,
-
-  // ---------- Optional ----------
-
-  // 1. If you wish to modify the Node Fetch caching properties, the default value is set to 'default'.
-
-  cache: "no-cache", // Suggested for quickly updating data from the SH Authentication System server.
-
-  // 2. Toast reminder: By default, it will reappear every 24 hours.
-
-  toastReminder: 86400, // In seconds
-
-  /* 3. Image Optimization: If you wishes to use NextJS image optimization in your error, disabled pages. By default it will use HTML img.
-
-  Note: If you use image optimization you have to include this object in your next config image section.
-
-  {
-    protocol: 'https',
-    hostname: 'storage.googleapis.com',
-    port: '',
-    pathname: '/**',
-  },
-  
-  */
-
-  imageOptimaization: false, // Boolean
-
+  cache: "no-cache",
+  toastReminder: 86400 // Reappear interval in seconds
 });
-
-export { ContentWrapper, appData, brandData };
-
-```
-**Note: If you have saved environment variables in this format you don't need to manually pass it.**
-
 ```
 
-SHAS_APP_ID=
-SHAS_APP_SECRET=
+---
 
-```
+## 🛠️ Tech Stack & Dependencies
 
+- **Language:** TypeScript
+- **Target Runtime:** Node.js / Next.js
+- **Ecosystem:** Legacy SHAS (SH Authentication System)
 
-### 3. Using the ContentWrapper in Layout
+---
 
-In your **layout.tsx**, wrap the children with **ContentWrapper**:
+## 📄 License
 
-```
+Distributed under the [MIT License](LICENSE). See `LICENSE` for more information.
 
-"use server";
-//...other imports
-import { ContentWrapper } from "@/shas.config";
+---
 
-...
-
-export  default  async  function  RootLayout({ children }:  Readonly<{ children:  React.ReactNode; }>) {
-  return (
-    <html  lang="en">
-	  <body>
-		<ContentWrapper>
-		  {children}
-		</ContentWrapper>
-	  </body>
-	</html>
-  );
-};
-
-```
-
-### 4. Accessing appData and brandData
-
-You can now access **appData** and **brandData** in any of your project files:
-
-```
-
-import { appData, brandData } from "@/shas.config";
-
-  
-// Do something with the data
-
-console.log(appData);
-
-```
-### 5. Accessing from client side
-Make sure you have initialized SHAS in the shas.config file.
-
-```
-
-import { getAppData, getBrandData } from "shas-app-controller/client";
-
-
-const { appData, status } = getAppData();
-
-const { brandData, status } = getBrandData();
-
-// Status can be "loading", "success", "error"
-
-```
-
-## Features
-* Remotely activate and deactivate your application with an eye-catching status page
-* Remotely show alert toasts with actions in your application
-* If you want to use **CloudBurst Lab** id as a OAuth 2.0 provider into your application. Use [next-auth-provider-cloudburst-lab](https://www.npmjs.com/search?q=next-auth-provider-cloudburst-lab)
-
-## Requirements
-* Minimum version of Nextjs 13 to use server actions.
-
-## Author
-**[Shawkat Hossain Maruf](https://sh-portfolio-maker.vercel.app/p/shawkath646)**
-<br />
-Contact: shawkath646@gmail.com
-
-## Version
-Current version: 1.0.0
-##### Please use latest version to prevent bugs and errors!
-
-<img  src="https://storage.googleapis.com/sh-cloudburst-labs.appspot.com/cloudburst_lab_logo_transparent.png?GoogleAccessId=firebase-adminsdk-lf84z%40sh-cloudburst-labs.iam.gserviceaccount.com&Expires=4863727974&Signature=B1G9adLuRnjVIxGHoh3dyMVtGsR00KdmatEJRzKpMHPDjgsUX%2Bi9VftAz71puzbFmFsC5xP%2FHZFcBKQ7NBfJbkQzhiuywJMBmOSJlsn7mNfLgZlEsU5ReaNaMXDF6y3W65YeR76u2XBiQjAvVNl%2FEIvMvgbanNJWoDULrxF1OgeF1q8O270oT05ZfzIytLpi7c%2BbBIv6OtmzeUHNa0KJaTX0QPcdesQKFL0pQpaQPncdk6iQtOCOUafgKfQregHwn9iOo1iW1SM4sLw92uJURvLWimyq8JUWjc8J8AXyActsuwQs9IRQz5%2BUjc4k5zVwIS4fQDODvN8t97FDR2Sg7g%3D%3D"  alt="CloudBurst Logo"  height="150"  width="150">
-
-*A product of [CloudBurst Lab](https://cloudburstlab.vercel.app)*
+<!-- BRANDING FOOTER -->
+<div align="center">
+  <sub>Engineered by</sub><br/>
+  <strong><a href="https://shawkath646.dev">Shawkat Hossain Maruf</a></strong>
+  <br/><br/>
+  <sub>A product of</sub><br/>
+  <a href="https://clouburstlab.com" target="_blank" rel="noopener noreferrer">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://assets.clouburstlab.com/branding/icon_dark.png">
+      <source media="(prefers-color-scheme: light)" srcset="https://assets.clouburstlab.com/branding/icon_light.png">
+      <img alt="clouburstlab" src="https://assets.clouburstlab.com/branding/icon_light.png" width="230">
+    </picture>
+  </a>
+</div>
